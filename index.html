@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="할일앱">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght=300;400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -135,27 +135,36 @@
     .cal-toggle-btn { background: none; border: none; cursor: pointer; font-size: 12px; color: var(--text-tertiary); padding: 2px 6px; border-radius: 4px; transition: color 0.15s; }
     .cal-toggle-btn:hover { color: var(--primary); }
 
-    /* 달력 접혔을 때 사이드 버튼 */
-    .cal-open-strip {
-      writing-mode: vertical-rl;
+    /* 접혔을 때 상단에 나타날 미니 달력 바 스타일 */
+    .collapsed-calendar-bar {
+      display: none;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 16px 10px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      display: none;
+      padding: 12px 18px;
+      margin-bottom: 16px;
       align-items: center;
-      gap: 8px;
-      transition: background 0.15s;
-      white-space: nowrap;
-      font-family: var(--font-main);
-      position: sticky;
-      top: 32px;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
     }
-    .cal-open-strip:hover { background: var(--primary-light); color: var(--primary); }
+    .collapsed-calendar-bar:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    .collapsed-cal-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .collapsed-cal-btn {
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 500;
+    }
 
     /* 칸반 보드 */
     .board-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
@@ -336,6 +345,16 @@
           <h2>📝 할일 목록</h2>
           <p>날짜를 클릭해서 할일을 관리하세요</p>
         </div>
+        
+        <!-- 접혔을 때 보드 상단에 자연스럽게 표시될 가로형 미니 바 -->
+        <div class="collapsed-calendar-bar" id="collapsedCalendarBar" onclick="toggleCalendar()">
+          <div class="collapsed-cal-info">
+            <span>📅</span>
+            <span id="collapsedCalDateText">선택된 날짜</span>
+          </div>
+          <div class="collapsed-cal-btn">달력 펼치기 💡</div>
+        </div>
+
         <div class="task-layout" id="taskLayout">
           <!-- 달력 -->
           <div id="calendarWrapper">
@@ -354,9 +373,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 달력 접혔을 때 보이는 얇은 버튼 -->
-          <button class="cal-open-strip" id="calOpenStrip" onclick="toggleCalendar()">📅 달력 펼치기</button>
 
           <!-- 칸반 보드 -->
           <div>
@@ -650,25 +666,30 @@
     }
 
     // ===================================================
-    // 달력
+    // 달력 접기 / 펼치기 로직 수정
     // ===================================================
     function toggleCalendar(){
       calCollapsed=!calCollapsed;
-      var body=document.getElementById('calendarBody');
-      var toggleBtn=document.getElementById('calToggleBtn');
-      var strip=document.getElementById('calOpenStrip');
-      var wrapper=document.getElementById('calendarWrapper');
-      var layout=document.getElementById('taskLayout');
+      var body = document.getElementById('calendarBody');
+      var toggleBtn = document.getElementById('calToggleBtn');
+      var bar = document.getElementById('collapsedCalendarBar');
+      var wrapper = document.getElementById('calendarWrapper');
+      var layout = document.getElementById('taskLayout');
+      
       if(calCollapsed){
         body.classList.add('collapsed');
         toggleBtn.textContent='▼ 펼치기';
-        strip.style.display='flex';
         wrapper.style.display='none';
         layout.classList.add('cal-hidden');
+        
+        // 접혔을 때 세로 스트립 대신 가로 미니 바에 날짜를 채워서 보여줍니다.
+        var displayDate = selectedDate ? formatDisplayDate(selectedDate) : formatDisplayDate(todayStr());
+        document.getElementById('collapsedCalDateText').textContent = displayDate + " 일정 보는 중";
+        bar.style.display='flex';
       } else {
         body.classList.remove('collapsed');
         toggleBtn.textContent='▲ 접기';
-        strip.style.display='none';
+        bar.style.display='none';
         wrapper.style.display='block';
         layout.classList.remove('cal-hidden');
       }
@@ -713,6 +734,12 @@
       var parts=ds.split('-');
       calYear=parseInt(parts[0]); calMonth=parseInt(parts[1])-1;
       renderCalendar();
+      
+      // 접힌 달력 바가 켜져 있다면 텍스트 갱신
+      if(calCollapsed) {
+        document.getElementById('collapsedCalDateText').textContent = formatDisplayDate(selectedDate) + " 일정 보는 중";
+      }
+      
       renderBoard();
     }
 
