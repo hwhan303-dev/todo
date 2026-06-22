@@ -105,66 +105,44 @@
     }
 
     /* 할일 페이지 레이아웃 */
-    .task-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: start; }
+    .task-layout { display: grid; grid-template-columns: 260px 1fr; gap: 20px; align-items: start; }
     .task-layout.cal-hidden { grid-template-columns: 1fr; }
     @media (max-width: 1024px) { .task-layout { grid-template-columns: 1fr; } }
 
-    /* 달력 */
-    .calendar-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; position: sticky; top: 32px; transition: all 0.3s ease; }
-    .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .calendar-title { font-size: 15px; font-weight: 700; }
-    .cal-nav-btn { background: none; border: 1px solid var(--border-color); border-radius: 6px; width: 28px; height: 28px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: background 0.15s; }
+    /* 달력 크기 축소 및 잘림 방지 수정 */
+    #calendarWrapper { width: 100%; max-width: 260px; }
+    .calendar-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; position: sticky; top: 32px; transition: all 0.3s ease; }
+    .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .calendar-title { font-size: 14px; font-weight: 700; }
+    .cal-nav-btn { background: none; border: 1px solid var(--border-color); border-radius: 6px; width: 24px; height: 24px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: background 0.15s; }
     .cal-nav-btn:hover { background: var(--bg-main); }
-    .calendar-body { overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; max-height: 400px; opacity: 1; }
+    .calendar-body { overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; max-height: none; opacity: 1; height: auto; }
     .calendar-body.collapsed { max-height: 0; opacity: 0; }
-    .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 6px; }
-    .calendar-weekdays span { font-size: 11px; font-weight: 600; color: var(--text-tertiary); padding: 4px 0; }
+    .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 4px; }
+    .calendar-weekdays span { font-size: 11px; font-weight: 600; color: var(--text-tertiary); padding: 2px 0; }
     .calendar-weekdays span:first-child { color: #e53e3e; }
     .calendar-weekdays span:last-child { color: #4f8ef7; }
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-    .cal-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; font-size: 13px; position: relative; transition: background 0.15s; border: 1.5px solid transparent; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+    
+    /* 달력 날짜 스타일 수정 (연한 회색톤 배경 적용) */
+    .cal-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; font-size: 12px; position: relative; transition: background 0.15s; border: 1.5px solid transparent; padding: 2px; }
     .cal-day:hover { background: var(--bg-main); }
     .cal-day.other-month { color: var(--text-tertiary); }
-    .cal-day.today { font-weight: 700; color: var(--primary); }
-    .cal-day.selected { background: var(--primary); color: #fff !important; border-color: var(--primary); }
-    .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--primary); margin-top: 2px; }
-    .cal-day.selected .cal-dot { background: #fff; }
+    .cal-day.today { font-weight: 700; color: var(--primary); border-color: var(--primary-light); }
+    .cal-day.selected { background: #e2e8f0; color: #1a1a1a !important; border-color: #cbd5e1; font-weight: 600; }
+    .cal-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--primary); margin-top: 2px; }
+    .cal-day.selected .cal-dot { background: var(--text-secondary); }
     .cal-day-num { line-height: 1; }
 
     /* 달력 접기 버튼 */
-    .cal-toggle-btn { background: none; border: none; cursor: pointer; font-size: 12px; color: var(--text-tertiary); padding: 2px 6px; border-radius: 4px; transition: color 0.15s; }
+    .cal-toggle-btn { background: none; border: none; cursor: pointer; font-size: 11px; color: var(--text-tertiary); padding: 2px 4px; border-radius: 4px; transition: color 0.15s; }
     .cal-toggle-btn:hover { color: var(--primary); }
 
-    /* 접혔을 때 상단에 나타날 미니 달력 바 스타일 */
-    .collapsed-calendar-bar {
-      display: none;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px 18px;
-      margin-bottom: 16px;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
-    .collapsed-calendar-bar:hover {
-      background: var(--primary-light);
-      border-color: var(--primary);
-    }
-    .collapsed-cal-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .collapsed-cal-btn {
-      font-size: 12px;
-      color: var(--primary);
-      font-weight: 500;
-    }
+    /* 접혔을 때 상단 바 */
+    .collapsed-calendar-bar { display: none; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 18px; margin-bottom: 16px; align-items: center; justify-content: space-between; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+    .collapsed-calendar-bar:hover { background: var(--primary-light); border-color: var(--primary); }
+    .collapsed-cal-info { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .collapsed-cal-btn { font-size: 12px; color: var(--primary); font-weight: 500; }
 
     /* 칸반 보드 */
     .board-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
@@ -184,20 +162,23 @@
     .kanban-col-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
     .kanban-col-count { font-size: 11px; color: var(--text-tertiary); background: #fff; border-radius: 10px; padding: 1px 7px; border: 1px solid var(--border-color); }
 
-    /* 할일 카드 */
-    .task-card { background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 8px; cursor: grab; transition: box-shadow 0.15s, transform 0.15s; user-select: none; border-left: 4px solid transparent; }
+    /* 할일 카드 및 체크박스/완료 스타일 */
+    .task-card { display: flex; align-items: flex-start; gap: 10px; background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 8px; cursor: grab; transition: box-shadow 0.15s, transform 0.15s; user-select: none; border-left: 4px solid transparent; }
     .task-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
     .task-card.dragging { opacity: 0.5; transform: rotate(2deg); cursor: grabbing; }
     .task-card.priority-high { border-left-color: #e53e3e; }
     .task-card.priority-mid { border-left-color: #f6ad55; }
     .task-card.priority-low { border-left-color: #48bb78; }
 
-    /* 완료 카드 스타일 */
+    .task-checkbox { width: 16px; height: 16px; margin-top: 2px; cursor: pointer; flex-shrink: 0; }
+    .task-card-content { flex: 1; min-width: 0; }
+
+    /* 완료 상태 가시성 강화 (취소선, 회색 글자) */
     .task-card.is-done .task-card-title { text-decoration: line-through; color: var(--text-tertiary); }
-    .task-card.is-done { opacity: 0.75; }
+    .task-card.is-done { opacity: 0.75; background: #fafafa; }
 
     .task-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
-    .task-card-title { font-size: 13px; font-weight: 500; line-height: 1.4; flex: 1; }
+    .task-card-title { font-size: 13px; font-weight: 500; line-height: 1.4; word-break: break-all; }
     .task-delete-btn { background: none; border: none; cursor: pointer; font-size: 14px; color: var(--text-tertiary); padding: 2px 4px; border-radius: 4px; flex-shrink: 0; transition: color 0.15s; }
     .task-delete-btn:hover { color: #e53e3e; }
     .task-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
@@ -221,9 +202,6 @@
     .radio-btn.high.selected { background: #e53e3e; border-color: #e53e3e; }
     .radio-btn.mid.selected { background: #f6ad55; border-color: #f6ad55; color: #fff; }
     .radio-btn.low.selected { background: #48bb78; border-color: #48bb78; }
-    .category-input-row { display: flex; gap: 8px; }
-    .category-input-row .input-field { flex: 1; }
-    .category-add-btn { padding: 0 14px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: var(--font-main); white-space: nowrap; }
     .category-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
     .category-chip { padding: 4px 12px; border-radius: 20px; border: 1.5px solid var(--border-color); background: #fff; font-size: 12px; cursor: pointer; font-family: var(--font-main); transition: all 0.15s; color: var(--text-secondary); }
     .category-chip.selected { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
@@ -234,7 +212,6 @@
     .stat-num { font-size: 28px; font-weight: 700; color: var(--primary); }
     .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
 
-    /* 홈 빠른 추가 */
     .quick-add-box { display: flex; gap: 8px; margin-bottom: 14px; }
     .quick-add-box .input-field { flex: 1; }
     .quick-add-submit { padding: 0 16px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-family: var(--font-main); white-space: nowrap; font-weight: 500; }
@@ -246,13 +223,12 @@
     .quick-chip.mid.selected { background: #fffaf0; color: #c05621; border-color: #f6ad55; }
     .quick-chip.low.selected { background: #f0fff4; color: #276749; border-color: #48bb78; }
 
-    /* 홈 할일 행 */
     .home-task-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border-color); }
     .home-task-row:last-child { border-bottom: none; }
     .home-task-title { flex: 1; font-size: 13px; font-weight: 500; }
     .home-task-title.done { text-decoration: line-through; color: var(--text-tertiary); }
 
-    /* 완료 목록 페이지 */
+    /* 완료 목록 */
     .done-date-group { margin-bottom: 20px; }
     .done-date-header { font-size: 13px; font-weight: 700; color: var(--text-secondary); padding: 6px 0; border-bottom: 2px solid var(--border-color); margin-bottom: 10px; }
     .done-task-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #fff; border-radius: 8px; margin-bottom: 6px; border: 1px solid var(--border-color); }
@@ -263,15 +239,15 @@
 
   <div class="mobile-top-bar" id="mobileTopBar">
     <button class="mobile-hamburger" onclick="toggleSidebar()">☰</button>
-    <div class="mobile-title" id="mobilePageTitle">나의 할일 앱</div>
+    <div class="mobile-title" id="mobilePageTitle">할일 관리</div>
   </div>
 
   <div class="app-container">
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-logo">📋 할일 관리</div>
+        <div class="sidebar-logo">할일 관리</div>
         <div class="profile-area">
-          <div class="profile-photo" id="profilePhoto" onclick="showPage('settingsPage', null, '⚙️ 설정')">👤</div>
+          <div class="profile-photo" id="profilePhoto" onclick="showPage('settingsPage', null, '설정')">👤</div>
           <div class="profile-info">
             <div class="profile-name" id="profileName">이름을 설정하세요</div>
             <div class="profile-quote" id="profileQuote">뭐든지 할 수 있어!</div>
@@ -279,10 +255,10 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <button class="nav-item active" onclick="showPage('homePage', this, '🏠 홈')">🏠 홈</button>
-        <button class="nav-item" onclick="showPage('taskPage', this, '📝 할일 목록'); renderTaskPage();">📝 할일 목록</button>
-        <button class="nav-item" onclick="showPage('donePage', this, '✅ 완료 목록'); renderDonePage();">✅ 완료 목록</button>
-        <button class="nav-item" onclick="showPage('settingsPage', this, '⚙️ 설정')">⚙️ 설정</button>
+        <button class="nav-item active" onclick="showPage('homePage', this, '홈')">홈</button>
+        <button class="nav-item" onclick="showPage('taskPage', this, '할일 목록'); renderTaskPage();">할일 목록</button>
+        <button class="nav-item" onclick="showPage('donePage', this, '완료 목록'); renderDonePage();">완료 목록</button>
+        <button class="nav-item" onclick="showPage('settingsPage', this, '설정')">설정</button>
       </nav>
       <div class="sidebar-footer">
         <button class="sf-btn" onclick="location.reload()">🔄 새로고침</button>
@@ -294,7 +270,7 @@
       <!-- 홈 -->
       <div id="homePage" class="page active">
         <div class="page-header">
-          <h2>🏠 홈</h2>
+          <h2>홈</h2>
           <p id="homeGreeting">오늘도 화이팅!</p>
         </div>
         <div class="home-stats">
@@ -342,11 +318,10 @@
       <!-- 할일 목록 -->
       <div id="taskPage" class="page">
         <div class="page-header">
-          <h2>📝 할일 목록</h2>
+          <h2>할일 목록</h2>
           <p>날짜를 클릭해서 할일을 관리하세요</p>
         </div>
         
-        <!-- 접혔을 때 보드 상단에 자연스럽게 표시될 가로형 미니 바 -->
         <div class="collapsed-calendar-bar" id="collapsedCalendarBar" onclick="toggleCalendar()">
           <div class="collapsed-cal-info">
             <span>📅</span>
@@ -356,7 +331,7 @@
         </div>
 
         <div class="task-layout" id="taskLayout">
-          <!-- 달력 -->
+          <!-- 달력 크기 조절된 래퍼 -->
           <div id="calendarWrapper">
             <div class="calendar-card">
               <div class="calendar-header">
@@ -417,7 +392,7 @@
       <!-- 완료 목록 -->
       <div id="donePage" class="page">
         <div class="page-header">
-          <h2>✅ 완료 목록</h2>
+          <h2>완료 목록</h2>
           <p>완료된 할일을 날짜별로 모아봐요</p>
         </div>
         <div id="donePageContent"></div>
@@ -425,7 +400,7 @@
 
       <!-- 설정 -->
       <div id="settingsPage" class="page">
-        <div class="page-header"><h2>⚙️ 설정</h2><p>앱 설정을 관리하세요</p></div>
+        <div class="page-header"><h2>설정</h2><p>앱 설정을 관리하세요</p></div>
         <div class="settings-tabs">
           <button class="settings-tab active" onclick="showSettingsSection('profile', this)">👤 프로필</button>
           <button class="settings-tab" onclick="showSettingsSection('design', this)">🎨 디자인</button>
@@ -580,7 +555,7 @@
       document.getElementById(pageId).classList.add('active');
       if(navBtn) navBtn.classList.add('active');
       document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('mobilePageTitle').textContent=title||'나의 할일 앱';
+      document.getElementById('mobilePageTitle').textContent=title||'할일 관리';
       if(pageId==='homePage') renderHome();
     }
     function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); }
@@ -666,7 +641,7 @@
     }
 
     // ===================================================
-    // 달력 접기 / 펼치기 로직 수정
+    // 달력 접기 / 펼치기
     // ===================================================
     function toggleCalendar(){
       calCollapsed=!calCollapsed;
@@ -682,7 +657,6 @@
         wrapper.style.display='none';
         layout.classList.add('cal-hidden');
         
-        // 접혔을 때 세로 스트립 대신 가로 미니 바에 날짜를 채워서 보여줍니다.
         var displayDate = selectedDate ? formatDisplayDate(selectedDate) : formatDisplayDate(todayStr());
         document.getElementById('collapsedCalDateText').textContent = displayDate + " 일정 보는 중";
         bar.style.display='flex';
@@ -730,22 +704,15 @@
 
     function selectDate(ds){
       selectedDate=ds;
-      // 달력 월도 맞추기
       var parts=ds.split('-');
       calYear=parseInt(parts[0]); calMonth=parseInt(parts[1])-1;
       renderCalendar();
-      
-      // 접힌 달력 바가 켜져 있다면 텍스트 갱신
       if(calCollapsed) {
         document.getElementById('collapsedCalDateText').textContent = formatDisplayDate(selectedDate) + " 일정 보는 중";
       }
-      
       renderBoard();
     }
 
-    // ===================================================
-    // 날짜 이동 (이전/오늘/다음)
-    // ===================================================
     function moveDate(dir){
       if(!selectedDate) return;
       var d=new Date(selectedDate); d.setDate(d.getDate()+dir);
@@ -754,7 +721,7 @@
     function goToday(){ selectDate(todayStr()); }
 
     // ===================================================
-    // 칸반 보드
+    // 칸반 보드 및 체크박스 토글 제어
     // ===================================================
     function renderTaskPage(){ renderCalendar(); if(selectedDate) renderBoard(); }
 
@@ -781,24 +748,49 @@
       document.getElementById('addTaskBtn').disabled=total>=10;
     }
 
+    /* 체크박스가 포함된 최신 카드 생성 시스템 */
     function makeTaskCard(task){
       var card=document.createElement('div');
       card.className='task-card priority-'+(task.priority==='high'?'high':task.priority==='mid'?'mid':'low');
       if(task.status==='done') card.classList.add('is-done');
       card.draggable=true; card.dataset.id=task.id;
+      
+      var isChecked = task.status === 'done' ? 'checked' : '';
       var pLabel=task.priority==='high'?'🔴 높음':task.priority==='mid'?'🟡 보통':'🟢 낮음';
       var pClass='badge-'+task.priority;
-      card.innerHTML='<div class="task-card-top">'
+      
+      card.innerHTML='<input type="checkbox" class="task-checkbox" '+isChecked+' onclick="toggleTaskCheck(\''+task.id+'\', event)">'
+        +'<div class="task-card-content">'
+        +'<div class="task-card-top">'
         +'<div class="task-card-title">'+escHtml(task.title)+'</div>'
         +'<button class="task-delete-btn" onclick="deleteTask(\''+task.id+'\')">🗑</button>'
         +'</div>'
         +'<div class="task-card-meta">'
         +(task.category?'<span class="task-badge badge-category">'+escHtml(task.category)+'</span>':'')
         +'<span class="task-badge '+pClass+'">'+pLabel+'</span>'
+        +'</div>'
         +'</div>';
+        
       card.addEventListener('dragstart',function(){ dragTaskId=task.id; dragFromDate=selectedDate; setTimeout(function(){ card.classList.add('dragging'); },0); });
       card.addEventListener('dragend',function(){ card.classList.remove('dragging'); });
       return card;
+    }
+
+    /* 체크박스 클릭 시 완료 카테고리로 자동 이동하는 스마트 함수 */
+    function toggleTaskCheck(id, event){
+      event.stopPropagation(); // 카드 드래그 이벤트와 충돌 방지
+      if(!selectedDate||!tasks[selectedDate]) return;
+      var task = tasks[selectedDate].find(function(t){ return t.id === id; });
+      if(!task) return;
+      
+      if(task.status === 'done'){
+        task.status = 'todo';
+        showToast('⏳ 할일을 다시 진행 중(시작 전)으로 돌렸어요');
+      } else {
+        task.status = 'done';
+        showToast('✅ 할일을 완료 카테고리로 보냈어요!');
+      }
+      saveTasks(); renderBoard(); renderCalendar();
     }
 
     // ===================================================
@@ -859,7 +851,7 @@
     }
 
     // ===================================================
-    // 홈 빠른 추가
+    // 홈 빠른 추가 및 홈 화면 렌더
     // ===================================================
     function renderQuickCategoryChips(){
       var el=document.getElementById('quickCategoryChips'); if(!el) return;
@@ -893,9 +885,6 @@
       showToast('✅ 오늘 할일에 추가됐어요!');
     }
 
-    // ===================================================
-    // 홈 렌더
-    // ===================================================
     function renderHome(){
       renderQuickCategoryChips();
       var today=todayStr(); var tomorrow=tomorrowStr();
@@ -929,7 +918,6 @@
     // ===================================================
     function renderDonePage(){
       var el=document.getElementById('donePageContent'); if(!el) return;
-      // 날짜 내림차순으로 정렬
       var dates=Object.keys(tasks).sort(function(a,b){ return b.localeCompare(a); });
       var html='';
       var found=false;
@@ -955,9 +943,6 @@
       el.innerHTML=html;
     }
 
-    // ===================================================
-    // 데이터 초기화
-    // ===================================================
     function clearAllData(){
       openModal('데이터 초기화','모든 할일·카테고리·프로필 데이터가 삭제됩니다. 정말 초기화할까요?',function(){
         localStorage.clear(); showToast('🗑 데이터가 초기화됐어요');
